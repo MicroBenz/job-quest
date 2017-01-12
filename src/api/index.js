@@ -6,8 +6,8 @@ var app = express();
 var cors = require('cors')
 app.use(cors());
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 app.use(bodyParser.json())
@@ -32,17 +32,15 @@ app.post('/', function(req, res) {
 
 app.delete('/:id', function(req,res) {
   Todo.remove({_id:req.params.id},function() {
-    res.send({msg:"deleted"});
+    res.send({message: 'deleted'});
   });
 })
 
 app.post('/:id/toggle', function(req,res) {
   Todo.findById(req.params.id, function(err, todo) {
-    if (todo.done) {
-      Todo.findByIdAndUpdate(req.params.id, {done:false}, function(){res.send({message:'success'})});
-    } else {
-      Todo.findByIdAndUpdate(req.params.id, {done:true}, function(){res.send({message:'success'})});
-    }
+    Todo.findByIdAndUpdate(req.params.id, {done: !todo.done}, function () {
+      res.send({message: 'success'});
+    })
   })
 })
 
