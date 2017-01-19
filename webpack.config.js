@@ -2,7 +2,7 @@ var webpack = require("webpack");
 var path = require("path");
 module.exports = {
 	context: __dirname,
-	entry: ['whatwg-fetch',"./src/client.js"],
+	entry: ['whatwg-fetch',"./src/client/client.js"],
 	output: {
 		path: path.join(__dirname, "dist"),
 		publicPath: "/", // relative path for github pages
