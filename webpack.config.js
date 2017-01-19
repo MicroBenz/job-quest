@@ -10,13 +10,33 @@ module.exports = {
   },
   module: {
     preLoaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'eslint-loader' },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
     ],
     loaders: [
-      { test: /\.css$/, loader: 'style-loader!css-loader' },
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets: ['react', 'es2015'] } },
-      { test: /\.png$/, loader: 'url-loader?prefix=img/&limit=5000' },
-      { test: /\.jpg$/, loader: 'url-loader?prefix=img/&limit=5000' },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?modules=true&localIdentName=[name]__[local]___[hash:base64:5]',
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['react', 'es2015'],
+        },
+      },
+      {
+        test: /\.png$/,
+        loader: 'url-loader?prefix=img/&limit=5000',
+      },
+      {
+        test: /\.jpg$/,
+        loader: 'url-loader?prefix=img/&limit=5000',
+      },
     ],
   },
   resolve: {

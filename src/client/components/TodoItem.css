@@ -1,0 +1,7 @@
+.done-item {
+    text-decoration: line-through;
+}
+
+.not-done-item {
+    text-decoration: initial;
+}

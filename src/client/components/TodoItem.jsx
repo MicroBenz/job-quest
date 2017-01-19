@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component, PropTypes } from 'react';
-import 'whatwg-fetch';
+import styles from './TodoItem.css';
 
 class TodoItem extends Component {
   constructor(props) {
     super(props);
-    this.apiEndPoint = 'http://localhost:3001';
     this.handleToggleClick = this.handleToggleClick.bind(this);
     this.handleOnClickDelete = this.handleOnClickDelete.bind(this);
   }
@@ -27,7 +26,10 @@ class TodoItem extends Component {
     const { title, isDone } = this.props;
     return (
       <li>
-        <span onClick={this.handleToggleClick} style={{ textDecoration: isDone ? 'line-through' : 'initial' }}>{title} </span>
+        <span
+          onClick={this.handleToggleClick}
+          className={isDone ? styles['done-item'] : styles['not-done-item']}
+        >{title} </span>
         <button onClick={this.handleOnClickDelete}>Delete</button>
       </li>
     );
