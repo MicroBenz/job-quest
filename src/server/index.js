@@ -1,13 +1,14 @@
 require('./api');
-var express = require('express');
-var path = require('path');
-var app = express();
+const express = require('express');
+const path = require('path');
 
-app.use(express.static(path.resolve(__dirname , '../../dist')));
-app.get('*', function(req, res) {
-    res.sendFile(path.resolve(__dirname, '../client/index.html'));
+const CLIENT_PORT = 3000;
+const app = express();
+app.use(express.static(path.resolve(__dirname, '../../dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
-app.listen(3000, function() { 
-    console.log('[Frontend] listening to port ' + 3000);
+app.listen(CLIENT_PORT, () => {
+  console.log(`[Frontend] listening to port ${CLIENT_PORT}`);
 });
