@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component, PropTypes } from 'react';
 import 'whatwg-fetch';
 
@@ -8,10 +9,12 @@ class TodoItem extends Component {
     this.handleToggleClick = this.handleToggleClick.bind(this);
     this.handleOnClickDelete = this.handleOnClickDelete.bind(this);
   }
+
   handleToggleClick() {
     const { id, onToggleTodo } = this.props;
     onToggleTodo(id);
   }
+
   handleOnClickDelete(e) {
     const { id, onDeleteTodo } = this.props;
     onDeleteTodo(id);
@@ -19,6 +22,7 @@ class TodoItem extends Component {
     e.stopPropagation();
     return false;
   }
+
   render() {
     const { title, isDone } = this.props;
     return (
@@ -31,7 +35,10 @@ class TodoItem extends Component {
 }
 
 TodoItem.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   isDone: PropTypes.bool.isRequired,
+  onToggleTodo: PropTypes.func.isRequired,
+  onDeleteTodo: PropTypes.func.isRequired,
 };
 export default TodoItem;

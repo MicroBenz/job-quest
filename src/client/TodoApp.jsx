@@ -14,12 +14,19 @@ export default class TodoApp extends Component {
     this.addTodo = this.addTodo.bind(this);
     this.toggleTodo = this.toggleTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.setTodoState = this.setTodoState.bind(this);
   }
+
   componentDidMount() {
     fetch(this.apiEndpoint)
       .then(response => response.json())
-      .then((todos) => { this.setState({ todos }); });
+      .then(this.setTodoState);
   }
+
+  setTodoState(todos) {
+    this.setState({ todos });
+  }
+
   addTodo(title) {
     return fetch(this.apiEndpoint, {
       method: 'POST',
@@ -32,21 +39,23 @@ export default class TodoApp extends Component {
     })
     .then(() => fetch(this.apiEndpoint))
     .then(response => response.json())
-    .then((todos) => { this.setState({ todos }); });
+    .then(this.setTodoState);
   }
+
   toggleTodo(id) {
     fetch(`${this.apiEndpoint}/${id}/toggle`, { method: 'POST' })
       .then(() => fetch(this.apiEndpoint))
       .then(response => response.json())
-      .then((todos) => { this.setState({ todos }); });
+      .then(this.setTodoState);
   }
+
   deleteTodo(id) {
-    console.log(`${this.apiEndpoint}/${id}`);
     fetch(`${this.apiEndpoint}/${id}`, { method: 'DELETE' })
-      .then(() => fetch(this.apiEndPoint))
+      .then(() => fetch(this.apiEndpoint))
       .then(response => response.json())
-      .then((todos) => { this.setState({ todos }); });
+      .then(this.setTodoState);
   }
+
   render() {
     const { todos } = this.state;
     return (
