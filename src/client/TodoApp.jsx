@@ -1,37 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import 'whatwg-fetch';
 
-export default class TodoApp extends React.Component {
+import AddTodo from './components/AddTodo';
+import TodoList from './components/TodoList';
+
+export default class TodoApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      newTodo: '',
     };
-    this.apiEndPoint = 'http://localhost:3001';
-    this.toggle = this.toggle.bind(this);
-    this.delete = this.delete.bind(this);
-    this.add = this.add.bind(this);
-    this.newTodoChange = this.newTodoChange.bind(this);
-    this.transformJSON = this.transformJSON.bind(this);
-    this.setTodoState = this.setTodoState.bind(this);
+    this.apiEndpoint = 'http://localhost:3001';
+    this.addTodo = this.addTodo.bind(this);
+    this.toggleTodo = this.toggleTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
   }
   componentDidMount() {
-    fetch(this.apiEndPoint)
-      .then(this.transformJSON)
-      .then(this.setTodoState);
+    fetch(this.apiEndpoint)
+      .then(response => response.json())
+      .then((todos) => { this.setState({ todos }); });
   }
-  delete(id, e) {
-    fetch(`${this.apiEndPoint}/${id}`, { method: 'DELETE' })
-      .then(() => fetch(this.apiEndPoint))
-      .then(this.transformJSON)
-      .then(this.setTodoState);
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  }
-  add(title) {
-    fetch(this.apiEndPoint, {
+  addTodo(title) {
+    return fetch(this.apiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,41 +30,29 @@ export default class TodoApp extends React.Component {
         title,
       }),
     })
-    .then(() => fetch(this.apiEndPoint))
-    .then(this.transformJSON)
-    .then((data) => { this.setState({ todos: data, newTodo: '' }); });
+    .then(() => fetch(this.apiEndpoint))
+    .then(response => response.json())
+    .then((todos) => { this.setState({ todos }); });
   }
-  newTodoChange(e) {
-    this.setState({ newTodo: e.target.value });
+  toggleTodo(id) {
+    fetch(`${this.apiEndpoint}/${id}/toggle`, { method: 'POST' })
+      .then(() => fetch(this.apiEndpoint))
+      .then(response => response.json())
+      .then((todos) => { this.setState({ todos }); });
   }
-  setTodoState(data) {
-    this.setState({
-      todos: data,
-    });
-  }
-  toggle(id) {
-    fetch(`${this.apiEndPoint}/${id}/toggle`, { method: 'POST' })
+  deleteTodo(id) {
+    console.log(`${this.apiEndpoint}/${id}`);
+    fetch(`${this.apiEndpoint}/${id}`, { method: 'DELETE' })
       .then(() => fetch(this.apiEndPoint))
-      .then(this.transformJSON)
-      .then(this.setTodoState);
-  }
-  transformJSON(data) {
-    return data.json();
+      .then(response => response.json())
+      .then((todos) => { this.setState({ todos }); });
   }
   render() {
+    const { todos } = this.state;
     return (
       <div>
-        <div>
-          <input type="text" onChange={this.newTodoChange} value={this.state.newTodo} />
-          <button onClick={this.add.bind(this, this.state.newTodo)}>Add</button>
-        </div>
-        <ul>
-          {
-            this.state.todos && this.state.todos.map((todo) => (
-              <li style={{textDecoration: todo.done ? 'line-through' : 'initial'}} key={todo._id} onClick={this.toggle.bind(this,todo._id)}>{todo.title} <button onClick={this.delete.bind(this,todo._id)}>Delete</button></li>
-            ))
-          }
-        </ul>
+        <AddTodo onAddTodo={this.addTodo} />
+        <TodoList todos={todos} onToggleTodo={this.toggleTodo} onDeleteTodo={this.deleteTodo} />
       </div>
     );
   }
