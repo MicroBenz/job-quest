@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 require('./api');
 const express = require('express');
 const path = require('path');
