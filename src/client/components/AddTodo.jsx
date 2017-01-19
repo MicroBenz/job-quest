@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-export default class AddTodo extends Component {
+class AddTodo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,7 +15,8 @@ export default class AddTodo extends Component {
   }
 
   handleAddNewTodo() {
-    this.props.onAddTodo(this.state.newTodo)
+    const { onAddTodo } = this.props;
+    onAddTodo(this.state.newTodo)
       .then(() => { this.setState({ newTodo: '' }); });
   }
 
@@ -28,3 +29,8 @@ export default class AddTodo extends Component {
     );
   }
 }
+
+AddTodo.propTypes = {
+  onAddTodo: PropTypes.func.isRequired,
+};
+export default AddTodo;
